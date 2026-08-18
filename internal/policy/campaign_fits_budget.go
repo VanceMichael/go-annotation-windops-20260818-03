@@ -13,15 +13,14 @@ func EvaluateCampaignFitsBudget(ctx Context) (Result, error) {
 		return Result{}, fault.New(fault.CodeInvalid, "policy.campaign_budget", "budget and cost cannot be negative")
 	}
 	lineTotal := int64(0)
-	lastIndex := len(ctx.Values) - 1
-	for index, value := range ctx.Values {
+	for _, value := range ctx.Values {
 		if value < 0 {
 			return Result{}, fault.New(fault.CodeInvalid, "policy.campaign_budget", "line cost cannot be negative")
 		}
-		if index == lastIndex {
-			continue
-		}
 		nextTotal := lineTotal + value
+		if nextTotal < lineTotal {
+			return Result{}, fault.New(fault.CodeInvalid, "policy.campaign_budget", "line cost total overflowed")
+		}
 		lineTotal = nextTotal
 	}
 	total := ctx.Cost + lineTotal

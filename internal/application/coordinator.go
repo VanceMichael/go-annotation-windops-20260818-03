@@ -39,15 +39,9 @@ type DecisionResponse struct {
 }
 
 var evaluators = map[string]func(policy.Context) (policy.Result, error){
-	"WeatherWindowIsSafe":         policy.EvaluateWeatherWindowIsSafe,
-	"WeatherWindowDoesNotOverlap": policy.EvaluateWeatherWindowDoesNotOverlap,
-	"CampaignFitsBudget": func(ctx policy.Context) (policy.Result, error) {
-		result, err := policy.EvaluateCampaignFitsBudget(ctx)
-		if err != nil {
-			return policy.Result{}, err
-		}
-		return result, nil
-	},
+	"WeatherWindowIsSafe":             policy.EvaluateWeatherWindowIsSafe,
+	"WeatherWindowDoesNotOverlap":     policy.EvaluateWeatherWindowDoesNotOverlap,
+	"CampaignFitsBudget":              policy.EvaluateCampaignFitsBudget,
 	"SlotHasCapacity":                 policy.EvaluateSlotHasCapacity,
 	"CampaignCanBeApproved":           policy.EvaluateCampaignCanBeApproved,
 	"VesselCanBeReserved":             policy.EvaluateVesselCanBeReserved,
